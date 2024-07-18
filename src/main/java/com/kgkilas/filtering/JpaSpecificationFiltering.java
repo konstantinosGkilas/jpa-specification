@@ -1,4 +1,4 @@
-package com.kgkilas.specification;
+package com.kgkilas.filtering;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

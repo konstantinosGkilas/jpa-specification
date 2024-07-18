@@ -1,4 +1,4 @@
-package com.kgkilas.specification.filters;
+package com.kgkilas.filtering.filters;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
