@@ -60,6 +60,19 @@ public class StringFilter extends RangeFilter<String> {
     }
 
     public String toString() {
-        return this.getFilterName() + " [" + (this.getEquals() != null ? "equals=" + (String)this.getEquals() + ", " : "") + (this.getNotEquals() != null ? "notEquals=" + (String)this.getNotEquals() + ", " : "") + (this.getSpecified() != null ? "specified=" + this.getSpecified() + ", " : "") + (this.getIn() != null ? "in=" + this.getIn() + ", " : "") + (this.getNotIn() != null ? "notIn=" + this.getNotIn() + ", " : "") + (this.getContains() != null ? "contains=" + this.getContains() + ", " : "") + (this.getDoesNotContain() != null ? "doesNotContain=" + this.getDoesNotContain() : "") + "]";
+        return this.getFilterName() + " ["
+                + (this.getEquals() != null ? "equals=" + this.getEquals() + ", " : "")
+                + (this.getNotEquals() != null ? "notEquals=" + this.getNotEquals() + ", " : "")
+                + (this.getSpecified() != null ? "specified=" + this.getSpecified() + ", " : "")
+                + (this.getIn() != null ? "in=" + this.getIn() + ", " : "")
+                + (this.getNotIn() != null ? "notIn=" + this.getNotIn() + ", " : "")
+                + (this.getGreaterThan() != null ? "greaterThan=" + this.getGreaterThan() + ", " : "")
+                + (this.getLessThan() != null ? "lessThan=" + this.getLessThan() + ", " : "")
+                + (this.getGreaterThanOrEqual() != null ? "greaterThanOrEqual=" + this.getGreaterThanOrEqual() + ", " : "")
+                + (this.getLessThanOrEqual() != null ? "lessThanOrEqual=" + this.getLessThanOrEqual() + ", " : "")
+                + (this.getLike() != null ? "like=" + this.getLike() : "")
+                + (this.getContains() != null ? "contains=" + this.getContains() + ", " : "")
+                + (this.getDoesNotContain() != null ? "doesNotContain=" + this.getDoesNotContain() : "")
+                + "]";
     }
 }
