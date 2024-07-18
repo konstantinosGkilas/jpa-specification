@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> extends BaseFilter<FIELD_TYPE> {
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private FIELD_TYPE greaterThan;
     private FIELD_TYPE lessThan;
     private FIELD_TYPE greaterThanOrEqual;
