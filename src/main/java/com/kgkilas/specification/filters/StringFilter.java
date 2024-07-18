@@ -1,8 +1,11 @@
 package com.kgkilas.specification.filters;
 
+import lombok.Getter;
+
 import java.io.Serial;
 import java.util.Objects;
 
+@Getter
 public class StringFilter extends RangeFilter<String> {
     @Serial
     private static final long serialVersionUID = 8L;
@@ -22,17 +25,9 @@ public class StringFilter extends RangeFilter<String> {
         return new StringFilter(this);
     }
 
-    public String getContains() {
-        return this.contains;
-    }
-
     public StringFilter setContains(String contains) {
         this.contains = contains;
         return this;
-    }
-
-    public String getDoesNotContain() {
-        return this.doesNotContain;
     }
 
     public StringFilter setDoesNotContain(String doesNotContain) {
