@@ -1,8 +1,11 @@
 package com.kgkilas.specification.filters;
 
+import lombok.Getter;
+
 import java.io.Serial;
 import java.util.Objects;
 
+@Getter
 public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> extends BaseFilter<FIELD_TYPE> {
     @Serial
     private static final long serialVersionUID = 2L;
@@ -28,17 +31,9 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
         return new RangeFilter<>(this);
     }
 
-    public FIELD_TYPE getGreaterThan() {
-        return this.greaterThan;
-    }
-
     public RangeFilter<FIELD_TYPE> setGreaterThan(FIELD_TYPE greaterThan) {
         this.greaterThan = greaterThan;
         return this;
-    }
-
-    public FIELD_TYPE getLessThan() {
-        return this.lessThan;
     }
 
     public RangeFilter<FIELD_TYPE> setLessThan(FIELD_TYPE lessThan) {
@@ -46,26 +41,14 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
         return this;
     }
 
-    public FIELD_TYPE getGreaterThanOrEqual() {
-        return this.greaterThanOrEqual;
-    }
-
     public RangeFilter<FIELD_TYPE> setGreaterThanOrEqual(FIELD_TYPE greaterThanOrEqual) {
         this.greaterThanOrEqual = greaterThanOrEqual;
         return this;
     }
 
-    public FIELD_TYPE getLessThanOrEqual() {
-        return this.lessThanOrEqual;
-    }
-
     public RangeFilter<FIELD_TYPE> setLessThanOrEqual(FIELD_TYPE lessThanOrEqual) {
         this.lessThanOrEqual = lessThanOrEqual;
         return this;
-    }
-
-    public FIELD_TYPE getLike() {
-        return this.like;
     }
 
     public RangeFilter<FIELD_TYPE> setLike(FIELD_TYPE like) {
@@ -104,7 +87,7 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
                 + (this.getLessThan() != null ? "lessThan=" + this.getLessThan() + ", " : "")
                 + (this.getGreaterThanOrEqual() != null ? "greaterThanOrEqual=" + this.getGreaterThanOrEqual() + ", " : "")
                 + (this.getLessThanOrEqual() != null ? "lessThanOrEqual=" + this.getLessThanOrEqual() + ", " : "")
-                + (this.getLike() != null ? "compare=" + this.getLike() : "")
+                + (this.getLike() != null ? "like=" + this.getLike() : "")
                 + "]";
     }
 }
