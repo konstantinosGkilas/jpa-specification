@@ -9,7 +9,7 @@
         <version>3.2.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.kgkilas.specification</groupId>
+    <groupId>com.kgkilas</groupId>
     <artifactId>jpa-specification</artifactId>
     <version>0.0.1</version>
     <name>jpa-specification</name>
