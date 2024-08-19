@@ -1,100 +1,101 @@
 package com.kgkilas.filtering.filters;
 
+import lombok.Getter;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BaseFilter<FIELD_TYPE> implements Serializable {
+@Getter
+public class BaseFilter<T extends Comparable<? super T>> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private FIELD_TYPE equals;
-    private FIELD_TYPE notEquals;
+
+    private FieldType<T> equals;
+    private FieldType<T> notEquals;
     private Boolean specified;
-    private List<FIELD_TYPE> in;
-    private List<FIELD_TYPE> notIn;
+    private List<FieldType<T>> in;
+    private List<FieldType<T>> notIn;
 
-    public BaseFilter() {
-    }
+    public BaseFilter() {}
 
-    public BaseFilter(BaseFilter<FIELD_TYPE> filter) {
+    public BaseFilter(BaseFilter<T> filter) {
         this.equals = filter.equals;
         this.notEquals = filter.notEquals;
         this.specified = filter.specified;
-        this.in = filter.in == null ? null : new ArrayList<>(filter.in);
-        this.notIn = filter.notIn == null ? null : new ArrayList<>(filter.notIn);
+        this.in = (filter.in == null) ? null : new ArrayList<>(filter.in);
+        this.notIn = (filter.notIn == null) ? null : new ArrayList<>(filter.notIn);
     }
 
-    public BaseFilter<FIELD_TYPE> copy() {
+    public BaseFilter<T> copy() {
         return new BaseFilter<>(this);
     }
 
-    public FIELD_TYPE getEquals() {
-        return this.equals;
-    }
-
-    public BaseFilter<FIELD_TYPE> setEquals(FIELD_TYPE equals) {
-        this.equals = equals;
+    public BaseFilter<T> setEquals(T equals) {
+        this.equals = new FieldType<>(equals);
         return this;
     }
 
-    public FIELD_TYPE getNotEquals() {
-        return this.notEquals;
-    }
-
-    public BaseFilter<FIELD_TYPE> setNotEquals(FIELD_TYPE notEquals) {
-        this.notEquals = notEquals;
+    public BaseFilter<T> setNotEquals(T notEquals) {
+        this.notEquals = new FieldType<>(notEquals);
         return this;
     }
 
-    public Boolean getSpecified() {
-        return this.specified;
-    }
-
-    public BaseFilter<FIELD_TYPE> setSpecified(Boolean specified) {
+    public BaseFilter<T> setSpecified(Boolean specified) {
         this.specified = specified;
         return this;
     }
 
-    public List<FIELD_TYPE> getIn() {
-        return this.in;
-    }
-
-    public BaseFilter<FIELD_TYPE> setIn(List<FIELD_TYPE> in) {
-        this.in = in;
-        return this;
-    }
-
-    public List<FIELD_TYPE>  getNotIn() {
-        return this.notIn;
-    }
-
-    public BaseFilter<FIELD_TYPE> setNotIn(List<FIELD_TYPE> notIn) {
-        this.notIn = notIn;
-        return this;
-    }
-
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (o != null && this.getClass() == o.getClass()) {
-            BaseFilter<?> filter = (BaseFilter)o;
-            return Objects.equals(this.equals, filter.equals) && Objects.equals(this.notEquals, filter.notEquals) && Objects.equals(this.specified, filter.specified) && Objects.equals(this.in, filter.in) && Objects.equals(this.notIn, filter.notIn);
-        } else {
-            return false;
+    public BaseFilter<T> setIn(List<T> inValues) {
+        if (inValues != null) {
+            this.in = new ArrayList<>();
+            for (T value : inValues) {
+                this.in.add(new FieldType<>(value));
+            }
         }
+        return this;
     }
 
+    public BaseFilter<T> setNotIn(List<T> notInValues) {
+        if (notInValues != null) {
+            this.notIn = new ArrayList<>();
+            for (T value : notInValues) {
+                this.notIn.add(new FieldType<>(value));
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseFilter<?> filter = (BaseFilter<?>) o;
+        return Objects.equals(equals, filter.equals) &&
+                Objects.equals(notEquals, filter.notEquals) &&
+                Objects.equals(specified, filter.specified) &&
+                Objects.equals(in, filter.in) &&
+                Objects.equals(notIn, filter.notIn);
+    }
+
+    @Override
     public int hashCode() {
-        return Objects.hash(this.equals, this.notEquals, this.specified, this.in, this.notIn);
+        return Objects.hash(equals, notEquals, specified, in, notIn);
     }
 
+    @Override
     public String toString() {
-        return this.getFilterName() + " [" + (this.getEquals() != null ? "equals=" + this.getEquals() + ", " : "") + (this.getNotEquals() != null ? "notEquals=" + this.getNotEquals() + ", " : "") + (this.getSpecified() != null ? "specified=" + this.getSpecified() + ", " : "") + (this.getIn() != null ? "in=" + this.getIn() + ", " : "") + (this.getNotIn() != null ? "notIn=" + this.getNotIn() : "") + "]";
+        return getFilterName() + " [" +
+                (equals != null ? "equals=" + equals + ", " : "") +
+                (notEquals != null ? "notEquals=" + notEquals + ", " : "") +
+                (specified != null ? "specified=" + specified + ", " : "") +
+                (in != null ? "in=" + in + ", " : "") +
+                (notIn != null ? "notIn=" + notIn : "") + "]";
     }
 
     protected String getFilterName() {
-        return this.getClass().getSimpleName();
+        return getClass().getSimpleName();
     }
 }
