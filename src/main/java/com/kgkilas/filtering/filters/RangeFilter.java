@@ -6,19 +6,19 @@ import java.io.Serial;
 import java.util.Objects;
 
 @Getter
-public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> extends BaseFilter<FIELD_TYPE> {
+public class RangeFilter<T extends Comparable<? super T>> extends BaseFilter<T> {
     @Serial
     private static final long serialVersionUID = 2L;
-    private FIELD_TYPE greaterThan;
-    private FIELD_TYPE lessThan;
-    private FIELD_TYPE greaterThanOrEqual;
-    private FIELD_TYPE lessThanOrEqual;
-    private FIELD_TYPE like;
 
-    public RangeFilter() {
-    }
+    private FieldType<T> greaterThan;
+    private FieldType<T> lessThan;
+    private FieldType<T> greaterThanOrEqual;
+    private FieldType<T> lessThanOrEqual;
+    private FieldType<T> like;
 
-    public RangeFilter(RangeFilter<FIELD_TYPE> filter) {
+    public RangeFilter() {}
+
+    public RangeFilter(RangeFilter<T> filter) {
         super(filter);
         this.greaterThan = filter.greaterThan;
         this.lessThan = filter.lessThan;
@@ -27,67 +27,62 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
         this.like = filter.like;
     }
 
-    public RangeFilter<FIELD_TYPE> copy() {
+    @Override
+    public RangeFilter<T> copy() {
         return new RangeFilter<>(this);
     }
 
-    public RangeFilter<FIELD_TYPE> setGreaterThan(FIELD_TYPE greaterThan) {
-        this.greaterThan = greaterThan;
+    public RangeFilter<T> setGreaterThan(T greaterThan) {
+        this.greaterThan = new FieldType<>(greaterThan);
         return this;
     }
 
-    public RangeFilter<FIELD_TYPE> setLessThan(FIELD_TYPE lessThan) {
-        this.lessThan = lessThan;
+    public RangeFilter<T> setLessThan(T lessThan) {
+        this.lessThan = new FieldType<>(lessThan);
         return this;
     }
 
-    public RangeFilter<FIELD_TYPE> setGreaterThanOrEqual(FIELD_TYPE greaterThanOrEqual) {
-        this.greaterThanOrEqual = greaterThanOrEqual;
+    public RangeFilter<T> setGreaterThanOrEqual(T greaterThanOrEqual) {
+        this.greaterThanOrEqual = new FieldType<>(greaterThanOrEqual);
         return this;
     }
 
-    public RangeFilter<FIELD_TYPE> setLessThanOrEqual(FIELD_TYPE lessThanOrEqual) {
-        this.lessThanOrEqual = lessThanOrEqual;
+    public RangeFilter<T> setLessThanOrEqual(T lessThanOrEqual) {
+        this.lessThanOrEqual = new FieldType<>(lessThanOrEqual);
         return this;
     }
 
-    public RangeFilter<FIELD_TYPE> setLike(FIELD_TYPE like) {
-        this.like = like;
+    public RangeFilter<T> setLike(T like) {
+        this.like = new FieldType<>(like);
         return this;
     }
 
+    @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (o != null && this.getClass() == o.getClass()) {
-            if (!super.equals(o)) {
-                return false;
-            } else {
-                RangeFilter<?> that = (RangeFilter)o;
-                return Objects.equals(this.greaterThan, that.greaterThan) && Objects.equals(this.lessThan, that.lessThan) && Objects.equals(this.greaterThanOrEqual, that.greaterThanOrEqual) && Objects.equals(this.lessThanOrEqual, that.lessThanOrEqual) && Objects.equals(this.like, that.like);
-            }
-        } else {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        RangeFilter<?> that = (RangeFilter<?>) o;
+        return Objects.equals(greaterThan, that.greaterThan) &&
+                Objects.equals(lessThan, that.lessThan) &&
+                Objects.equals(greaterThanOrEqual, that.greaterThanOrEqual) &&
+                Objects.equals(lessThanOrEqual, that.lessThanOrEqual) &&
+                Objects.equals(like, that.like);
     }
 
+    @Override
     public int hashCode() {
-        return Objects.hash(new Object[]{super.hashCode(), this.greaterThan, this.lessThan, this.greaterThanOrEqual, this.lessThanOrEqual, this.like});
+        return Objects.hash(super.hashCode(), greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual, like);
     }
 
     @Override
     public String toString() {
-        return this.getFilterName() + " ["
-                + (this.getEquals() != null ? "equals=" + this.getEquals() + ", " : "")
-                + (this.getNotEquals() != null ? "notEquals=" + this.getNotEquals() + ", " : "")
-                + (this.getSpecified() != null ? "specified=" + this.getSpecified() + ", " : "")
-                + (this.getIn() != null ? "in=" + this.getIn() + ", " : "")
-                + (this.getNotIn() != null ? "notIn=" + this.getNotIn() + ", " : "")
-                + (this.getGreaterThan() != null ? "greaterThan=" + this.getGreaterThan() + ", " : "")
-                + (this.getLessThan() != null ? "lessThan=" + this.getLessThan() + ", " : "")
-                + (this.getGreaterThanOrEqual() != null ? "greaterThanOrEqual=" + this.getGreaterThanOrEqual() + ", " : "")
-                + (this.getLessThanOrEqual() != null ? "lessThanOrEqual=" + this.getLessThanOrEqual() + ", " : "")
-                + (this.getLike() != null ? "like=" + this.getLike() : "")
-                + "]";
+        return super.toString() + " [" +
+                (greaterThan != null ? "greaterThan=" + greaterThan + ", " : "") +
+                (lessThan != null ? "lessThan=" + lessThan + ", " : "") +
+                (greaterThanOrEqual != null ? "greaterThanOrEqual=" + greaterThanOrEqual + ", " : "") +
+                (lessThanOrEqual != null ? "lessThanOrEqual=" + lessThanOrEqual + ", " : "") +
+                (like != null ? "like=" + like : "") +
+                "]";
     }
 }
