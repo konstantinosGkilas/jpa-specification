@@ -36,14 +36,14 @@ public class CriteriaSpecification<T> implements Specification<T> {
     private static <F extends Comparable<? super F>> Map<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> constructPredicateMap(RangeFilter<F> filter) {
         // Map to store the condition checks and corresponding predicate functions
         Map<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> predicateMap = new LinkedHashMap<>();
-        predicateMap.put(filter.getEquals() != null, (path, cb) -> cb.equal(path, filter.getEquals()));
-        predicateMap.put(filter.getIn() != null && !filter.getIn().isEmpty(), (path, cb) -> path.in(filter.getIn()));
-        predicateMap.put(filter.getNotIn() != null && !filter.getNotIn().isEmpty(), (path, cb) -> path.in(filter.getNotIn()).not());
+        predicateMap.put(filter.getEquals() != null, (path, cb) -> cb.equal(path, filter.getEquals().getValue()));
+       // predicateMap.put(filter.getIn() != null && !filter.getIn().isEmpty(), (path, cb) -> path.in(filter.getIn().));
+        //predicateMap.put(filter.getNotIn() != null && !filter.getNotIn().isEmpty(), (path, cb) -> path.in(filter.getNotIn()).not());
         predicateMap.put(filter.getGreaterThan() != null, (path, cb) -> cb.greaterThan(path, filter.getGreaterThan().getValue()));
         predicateMap.put(filter.getGreaterThanOrEqual() != null, (path, cb) -> cb.greaterThanOrEqualTo(path, filter.getGreaterThanOrEqual().getValue()));
         predicateMap.put(filter.getLessThan() != null, (path, cb) -> cb.lessThan(path, filter.getLessThan().getValue()));
         predicateMap.put(filter.getLessThanOrEqual() != null, (path, cb) -> cb.lessThanOrEqualTo(path, filter.getLessThanOrEqual().getValue()));
-        predicateMap.put(filter.getLike() != null, (path, cb) -> cb.like(path.as(String.class), "%" + filter.getLike().toString() + "%"));
+        predicateMap.put(filter.getLike() != null, (path, cb) -> cb.like(path.as(String.class), "%" + filter.getLike().getValue().toString() + "%"));
         return predicateMap;
     }
 
