@@ -1,9 +1,9 @@
 package com.gkilas.filtering.rest.service;
 
-import com.kgkilas.filtering.criteria.BookCriteria;
-import com.kgkilas.filtering.domain.Book;
-import com.kgkilas.filtering.repository.BookRepository;
-import com.kgkilas.filtering.specification.BookSpecification;
+import com.gkilas.filtering.rest.criteria.BookCriteria;
+import com.gkilas.filtering.rest.domain.Book;
+import com.gkilas.filtering.rest.repository.BookRepository;
+import com.gkilas.filtering.rest.specification.BookSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

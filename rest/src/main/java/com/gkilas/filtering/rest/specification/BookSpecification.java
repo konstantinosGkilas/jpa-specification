@@ -1,9 +1,9 @@
-package com.kgkilas.filtering.specification;
+package com.gkilas.filtering.rest.specification;
 
-import com.kgkilas.filtering.criteria.BookCriteria;
-import com.kgkilas.filtering.domain.Book;
+import com.gkilas.filtering.rest.criteria.BookCriteria;
+import com.gkilas.filtering.rest.domain.Book;
 import org.springframework.data.jpa.domain.Specification;
-
+import com.kgkilas.filtering.specification.*;
 import java.util.ArrayList;
 import java.util.List;
 

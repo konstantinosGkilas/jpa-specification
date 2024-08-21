@@ -1,6 +1,6 @@
 package com.gkilas.filtering.rest.repository;
 
-import com.kgkilas.filtering.domain.Book;
+import com.gkilas.filtering.rest.domain.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

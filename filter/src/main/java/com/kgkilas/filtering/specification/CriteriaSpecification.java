@@ -12,14 +12,14 @@ import java.util.function.BiFunction;
 
 public class CriteriaSpecification<T> implements Specification<T> {
 
-    protected <F extends Comparable<? super F>> Specification<T> buildSpecification(String column, RangeFilter<F> rangeFilter) {
+    public <F extends Comparable<? super F>> Specification<T> buildSpecification(String column, RangeFilter<F> rangeFilter) {
         if (rangeFilter == null) {
             return null;
         }
         return (root, query, criteriaBuilder) -> buildRangePredicate(root.get(column), rangeFilter, criteriaBuilder);
     }
 
-    protected static <F extends Comparable<? super F>> Predicate buildRangePredicate(Path<F> fieldPath, RangeFilter<F> rangeFilter, CriteriaBuilder criteriaBuilder) {
+    public static <F extends Comparable<? super F>> Predicate buildRangePredicate(Path<F> fieldPath, RangeFilter<F> rangeFilter, CriteriaBuilder criteriaBuilder) {
         // Initialize with conjunction predicate (i.e., true)
         Predicate combinedPredicate = criteriaBuilder.conjunction();
         if (rangeFilter != null) {
@@ -54,7 +54,7 @@ public class CriteriaSpecification<T> implements Specification<T> {
         return predicateMap;
     }
 
-    protected static <T, F extends Comparable<? super F>> Specification<T> buildJoinSpecification(
+    public static <T, F extends Comparable<? super F>> Specification<T> buildJoinSpecification(
             String column, RangeFilter<F> rangeFilter, String attribute) {
         return (root, query, criteriaBuilder) -> {
             Path<F> fieldPath = root.get(column).get(attribute);
@@ -62,7 +62,7 @@ public class CriteriaSpecification<T> implements Specification<T> {
         };
     }
 
-    protected static <T> Specification<T> combine(Collection<Specification<T>> specifications) {
+    public static <T> Specification<T> combine(Collection<Specification<T>> specifications) {
         Specification<T> combinedSpecification = null;
         for (Specification<T> specification : specifications) {
             if (combinedSpecification == null) {
@@ -74,7 +74,7 @@ public class CriteriaSpecification<T> implements Specification<T> {
         return combinedSpecification;
     }
 
-    protected static <T> void addIfNotNull(List<Specification<T>> specifications, Specification<T> specification) {
+    public static <T> void addIfNotNull(List<Specification<T>> specifications, Specification<T> specification) {
         if (specification != null) {
             specifications.add(specification);
         }

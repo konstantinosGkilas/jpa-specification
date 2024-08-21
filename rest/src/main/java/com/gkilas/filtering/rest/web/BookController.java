@@ -1,8 +1,8 @@
 package com.gkilas.filtering.rest.web;
 
-import com.kgkilas.filtering.criteria.BookCriteria;
-import com.kgkilas.filtering.domain.Book;
-import com.kgkilas.filtering.service.BookService;
+import com.gkilas.filtering.rest.criteria.BookCriteria;
+import com.gkilas.filtering.rest.domain.Book;
+import com.gkilas.filtering.rest.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
