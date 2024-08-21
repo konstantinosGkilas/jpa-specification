@@ -1,27 +1,30 @@
 package com.kgkilas.filtering.specification;
 
+import com.kgkilas.filtering.filters.FieldType;
 import com.kgkilas.filtering.filters.RangeFilter;
+import com.kgkilas.filtering.filters.StringFilter;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
 import java.util.function.BiFunction;
 
+
 public class CriteriaSpecification<T> implements Specification<T> {
 
-    protected <F extends Comparable<? super F>> Specification<T> buildSpecification(String column, RangeFilter<F> filter) {
-        if (filter == null) {
+    protected <F extends Comparable<? super F>> Specification<T> buildSpecification(String column, RangeFilter<F> rangeFilter) {
+        if (rangeFilter == null) {
             return null;
         }
-        return (root, query, criteriaBuilder) -> buildRangePredicate(root.get(column), filter, criteriaBuilder);
+        return (root, query, criteriaBuilder) -> buildRangePredicate(root.get(column), rangeFilter, criteriaBuilder);
     }
 
-    protected static <F extends Comparable<? super F>> Predicate buildRangePredicate(Path<F> fieldPath, RangeFilter<F> filter, CriteriaBuilder criteriaBuilder) {
+    protected static <F extends Comparable<? super F>> Predicate buildRangePredicate(Path<F> fieldPath, RangeFilter<F> rangeFilter, CriteriaBuilder criteriaBuilder) {
         // Initialize with conjunction predicate (i.e., true)
         Predicate combinedPredicate = criteriaBuilder.conjunction();
-        if (filter != null) {
+        if (rangeFilter != null) {
             // Construct the map of conditions and corresponding predicate functions
-            Map<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> predicateMap = constructPredicateMap(filter);
+            Map<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> predicateMap = constructPredicateMap(rangeFilter);
             // Iterate over the map and apply the predicates if the condition is true
             for (Map.Entry<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> entry : predicateMap.entrySet()) {
                 if (entry.getKey()) {
@@ -33,25 +36,29 @@ public class CriteriaSpecification<T> implements Specification<T> {
         return combinedPredicate;
     }
 
-    private static <F extends Comparable<? super F>> Map<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> constructPredicateMap(RangeFilter<F> filter) {
+    private static <F extends Comparable<? super F>> Map<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> constructPredicateMap(RangeFilter<F> rangeFilter) {
         // Map to store the condition checks and corresponding predicate functions
         Map<Boolean, BiFunction<Path<F>, CriteriaBuilder, Predicate>> predicateMap = new LinkedHashMap<>();
-        predicateMap.put(filter.getEquals() != null, (path, cb) -> cb.equal(path, filter.getEquals().getValue()));
-       // predicateMap.put(filter.getIn() != null && !filter.getIn().isEmpty(), (path, cb) -> path.in(filter.getIn().));
-        //predicateMap.put(filter.getNotIn() != null && !filter.getNotIn().isEmpty(), (path, cb) -> path.in(filter.getNotIn()).not());
-        predicateMap.put(filter.getGreaterThan() != null, (path, cb) -> cb.greaterThan(path, filter.getGreaterThan().getValue()));
-        predicateMap.put(filter.getGreaterThanOrEqual() != null, (path, cb) -> cb.greaterThanOrEqualTo(path, filter.getGreaterThanOrEqual().getValue()));
-        predicateMap.put(filter.getLessThan() != null, (path, cb) -> cb.lessThan(path, filter.getLessThan().getValue()));
-        predicateMap.put(filter.getLessThanOrEqual() != null, (path, cb) -> cb.lessThanOrEqualTo(path, filter.getLessThanOrEqual().getValue()));
-        predicateMap.put(filter.getLike() != null, (path, cb) -> cb.like(path.as(String.class), "%" + filter.getLike().getValue().toString() + "%"));
+        predicateMap.put(rangeFilter.getEquals() != null, (path, cb) -> cb.equal(path, rangeFilter.getEquals().getValue()));
+        predicateMap.put(rangeFilter.getIn() != null && !rangeFilter.getIn().isEmpty(), (path, cb) -> path.in(rangeFilter.getIn().stream().map(FieldType::getValue).toList()));
+        predicateMap.put(rangeFilter.getNotIn() != null && !rangeFilter.getNotIn().isEmpty(), (path, cb) -> path.in(rangeFilter.getNotIn().stream().map(FieldType::getValue).toList()).not());
+        predicateMap.put(rangeFilter.getGreaterThan() != null, (path, cb) -> cb.greaterThan(path, rangeFilter.getGreaterThan().getValue()));
+        predicateMap.put(rangeFilter.getGreaterThanOrEqual() != null, (path, cb) -> cb.greaterThanOrEqualTo(path, rangeFilter.getGreaterThanOrEqual().getValue()));
+        predicateMap.put(rangeFilter.getLessThan() != null, (path, cb) -> cb.lessThan(path, rangeFilter.getLessThan().getValue()));
+        predicateMap.put(rangeFilter.getLessThanOrEqual() != null, (path, cb) -> cb.lessThanOrEqualTo(path, rangeFilter.getLessThanOrEqual().getValue()));
+        predicateMap.put(rangeFilter.getLike() != null, (path, cb) -> cb.like(path.as(String.class), "%" + rangeFilter.getLike().getValue().toString() + "%"));
+        if(rangeFilter.getClass() == StringFilter.class){
+            predicateMap.put(((StringFilter) rangeFilter).getContains() != null, (path, cb) -> cb.like(cb.lower(path.as(String.class)), "%" + ((StringFilter) rangeFilter).getContains().toLowerCase() + "%"));
+            predicateMap.put(((StringFilter) rangeFilter).getDoesNotContain() != null, (path, cb) -> cb.not(cb.like(cb.lower(path.as(String.class)), "%" + ((StringFilter) rangeFilter).getDoesNotContain().toLowerCase() + "%")));
+        }
         return predicateMap;
     }
 
     protected static <T, F extends Comparable<? super F>> Specification<T> buildJoinSpecification(
-            String column, RangeFilter<F> filter, String attribute) {
+            String column, RangeFilter<F> rangeFilter, String attribute) {
         return (root, query, criteriaBuilder) -> {
             Path<F> fieldPath = root.get(column).get(attribute);
-            return buildRangePredicate(fieldPath, filter, criteriaBuilder);
+            return buildRangePredicate(fieldPath, rangeFilter, criteriaBuilder);
         };
     }
 
