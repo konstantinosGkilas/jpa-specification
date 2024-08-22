@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Setter
 public class BookCriteria implements Serializable {
 
-    LongFilter bookId;
-    LongFilter authorId;
-    StringFilter authorName;
-    StringFilter title;
+    private LongFilter bookId;
+    private LongFilter authorId;
+    private StringFilter authorName;
+    private StringFilter title;
 }
