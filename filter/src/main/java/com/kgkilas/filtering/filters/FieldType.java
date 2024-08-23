@@ -22,14 +22,20 @@ public class FieldType<T extends Comparable<? super T>> implements Comparable<Fi
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value != null ? value.hashCode() : 0;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        FieldType<?> other = (FieldType<?>) obj;
-        return value.equals(other.value);
+        boolean isEqual = false;
+
+        if (this == obj) {
+            isEqual = true;
+        } else if (obj != null && getClass() == obj.getClass()) {
+            FieldType<?> other = (FieldType<?>) obj;
+            isEqual = value.equals(other.value);
+        }
+
+        return isEqual;
     }
 }
